@@ -1,60 +1,15 @@
-export let movies = [
-    {   
-        id: 0,
-        title: "Ironman",
-        star: 4,
-        actor: "Rodaju",
-    },
-    {   
-        id: 1,
-        title: "Captin America-Winter solider",
-        star: 5,
-        actor: "Chris Evans"
-    },
-    {
-        id: 2,
-        title: "Spiderman-Homecoming",
-        star: 2,
-        actor: "Tom Holland"
+import fetch from "node-fetch";
+const API_URL = "https://yts.am/api/v2/list_movies.json?";
+
+export const getMovies = (limit, rating) => {
+    let REQUEST_URL = API_URL;
+    if(limit > 0) {
+        REQUEST_URL += `limit=${limit}`;
     }
-];
-
-export const getMovies = () => movies;
-
-export const getById = id => {
-    const filteredMovie = movies.filter(movie => movie.id === id);
-    console.log(filteredMovie);
-    return filteredMovie[0];
-};
-
-export const deleteMovie = (id) => {
-    const cleanedMovies = movies.filter(movie => movie.id !== id);
-    if(movies.length > cleanedMovies){
-        movies = cleandedMovies;
-        return true;
-    } else {
-        return false;
-    };
+    if(rating > 0) {
+        REQUEST_URL += `&minimum_rating=${rating}`;
+    }
+    return fetch(REQUEST_URL)
+        .then(res => res.json())
+        .then(json => json.data.movies);
 }
-
-export const addMovie = (title, star, actor) => {
-    const newMovie = {
-        id: movies.length,
-        title,
-        star,
-        actor
-    };
-    movies.push(newMovie);
-    return newMovie;
-};
-
-
-
-
-
-
-
-
-
-
-
